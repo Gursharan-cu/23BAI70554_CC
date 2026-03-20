@@ -1,18 +1,40 @@
-class Solution:
-    def maxRunTime(self, n: int, batteries: List[int]) -> int:
-        left = 0
-        right = sum(batteries) // n
+class Solution {
+public:
+    typedef long long ll;
 
-        while left <= right:
-            mid = left + (right - left) // 2
+    bool helper(long long targetTime, int n, vector<int>& batteries) {
+        long long curr_avl = 0;
 
-            total = 0
-            for b in batteries:
-                total += min(b,mid)
-            
-            if total >= n * mid:
-                left = mid + 1
-            else:
-                right = mid - 1
-        
-        return right
+        for (int i = 0; i < batteries.size(); i++) {
+            curr_avl += min(1LL * batteries[i], targetTime);
+        }
+
+        return curr_avl >= (ll)n * targetTime;
+    }
+
+    long long maxRunTime(int n, vector<int>& batteries) {
+
+        long long totalPower = 0;
+
+        for (int i = 0; i < batteries.size(); i++) {
+            totalPower += batteries[i];
+        }
+
+        long long s = 0;
+        long long e = totalPower / n;
+
+        while (s <= e) {
+            long long mid = s + (e - s) / 2;
+
+            if (helper(mid, n, batteries)) {
+                s = mid + 1;
+            } else {
+                e = mid - 1;
+            }
+        }
+
+        return e;
+    }
+};
+}
+}
